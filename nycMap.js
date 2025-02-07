@@ -55,26 +55,29 @@ d3.json('nyc.geojson').then(
                 layer.bindPopup("<center><h2>" + feature.properties.neighborhood + "</h2> <hr> <h3>" + feature.properties.borough + "</h3></center>");
                 // set mouse events to change map styling when neighborhoods are hovered
                 layer.on({
+                    // When a user's mouse cursor touches a map feature (neighborhood), the mouseover event calls this function, which makes the neighborhood highlight
                     mouseover: function(event)
-   {
-       // reference the item (layer) that triggers the event
-       layer = event.target;
-       // use setStyle to update the fillOpacity style property
-       layer.setStyle({
-           fillOpacity: 0.9
-       });
-   },
-    mouseout: function(event)
-   {
-       // reference the item (layer) that triggers the event
-       layer = event.target;
-       // use setStyle to update the fillOpacity style property
-       layer.setStyle({
-           fillOpacity: 0.6
-       });
-   }
-});
-
+                    {
+                        // reference the item (layer) that triggers the event
+                        layer = event.target;
+                        // use setStyle to update the fillOpacity style property
+                        layer.setStyle({
+                            fillOpacity: 0.9,
+                            weight: 5
+                        });
+                    },
+                     // When the cursor no longer hovers over a map feature (neighborhood) (that is, when the mouseout event occurs), the feature's opacity reverts back to 50%.
+                    mouseout: function(event)
+                    {
+                        // reference the item (layer) that triggers the event
+                        layer = event.target;
+                        // use setStyle to update the fillOpacity style property
+                        layer.setStyle({
+                            fillOpacity: 0.6,
+                            weight: 2
+                        });
+                    }
+                });
                }
             }
         ).addTo(myMap);

@@ -19,6 +19,7 @@ let date = "$where=created_date between'2016-01-01T00:00:00' and '2017-01-01T00:
 let complaint = "&complaint_type=Rodent";
 // Add a limit.
 let limit = "&$limit=10000";
+
 // Assemble the API query URL.
 let url = baseURL + date + complaint + limit;
 
@@ -28,27 +29,29 @@ d3.json(url).then(
          // simple console log of the data
          console.log(data);
 
-          // step 1 - make an empty array to hold the data points for the heatmap
-          let heatArray = [];
+         // step 1 - make an empty array to hold the data points for the heatmap
+         let heatArray = [];
 
-          // step 2 - loop through the data points (rodent incident array) and add data points
+         // step 2 - loop through the data points (rodent incident array) and add data points
          // to the heat array
          for(let i = 0; i < data.length; i++)
+         {
+            // get the location
+            let location = data[i].location;
+
+            if(location)
             {
-               // get the location
-               let location = data[i].location;
-               if(location)
-               {
-                   // if the incident has a location property, get the data point and add to the array
-                   // index 0 - longitude
-                   // index 1 - latitude
-                   heatArray.push([location.coordinates[1], location.coordinates[0]]);
-               }
+                // if the incident has a location property, get the data point and add to the array
+                // index 0 - longitude
+                // index 1 - latitude
+                heatArray.push([location.coordinates[1], location.coordinates[0]]);
             }
-            // step 3 - create the heat map by using L.heatLayer()
-            let heat = L.heatLayer(heatArray, {
-               radius: 20,
-               blur: 35
-            }).addTo(myMap);
+         }
+
+         // step 3 - create the heat map by using L.heatLayer()
+         let heat = L.heatLayer(heatArray, {
+            radius: 20,
+            blur: 35
+         }).addTo(myMap);
     }
 );
